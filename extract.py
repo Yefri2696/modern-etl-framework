@@ -21,7 +21,7 @@ def extract_from_sql(query, connection_string):
     EXTRACTORS MODULE — Data Extraction Layer (ETL/ELT)
     Author: Oscar
     Description:
-        Conjunto de funciones profesionales para extraer datos
+        Conjunto de funciones profesionales simple para extraer datos
         desde múltiples fuentes: CSV, SQL, NoSQL, APIs, Kafka
         y Web Scraping.
 ===========================================================

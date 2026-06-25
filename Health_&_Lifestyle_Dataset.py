@@ -6,6 +6,8 @@ file_path = r'C:\Users\yefri\OneDrive\Escritorio\datos\Visualizacion de datos\Da
 
 df = pd.read_csv(file_path, encoding="windows-1252")
 
+pd.set_option('display.max_columns')
+
 print(df.duplicated().sum())
 print(df.isnull().sum())
 
