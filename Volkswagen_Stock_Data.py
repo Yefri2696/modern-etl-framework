@@ -9,7 +9,10 @@ Flow:
 Extract → Clean → TypeCast → Export"""
 
 import pandas as pd
+<<<<<<< HEAD
 import matplotlib.pyplot as plt
+=======
+>>>>>>> 5552d2d840f915a0d5d271bbfe6591410eba10db
 from extract import  extract
 from transform import TransformPipeline
 from transform import ColumnCleaner
@@ -49,6 +52,7 @@ print(df.head(10))
 #4. EXPORT
 #=======================================
 df.to_csv('Volkswagen Stock Data (1995-2026) clean.csv', index=False)
+<<<<<<< HEAD
 
 # ============================
 # 5. KPIs
@@ -133,3 +137,8 @@ print(f"To: {end_date}")
 print("\n===== Descriptive Statistics =====")
 print(df.describe())
 
+=======
+
+
+
+>>>>>>> 5552d2d840f915a0d5d271bbfe6591410eba10db
