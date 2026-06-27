@@ -47,12 +47,3 @@ def delete_duplicates_nulls (df, key_cols=['col']):
 df_cleaned = delete_duplicates_nulls(df, key_cols=['id'])
 
 
-
-res = []
-for i in range(3):
-    for j in range(3):
-        if j == 1:
-            break
-        res.append(i)
-
-print(res)
