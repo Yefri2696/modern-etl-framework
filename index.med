@@ -1,208 +1,120 @@
-"""
-Project: BMW Car Sales & Price Analysis
-Author: Oscar Hernández
+# 🚗 BMW Car Sales & Price Analysis  
+### **Author:** Oscar Hernández  
+### **Role:** Data Analyst / Junior Data Engineer  
 
-Objective:
-- Load historical BMW car sales and price data.
-- Clean and standardize raw columns.
-- Assess data quality (missing values, duplicates, dtypes).
-- Analyze how prices evolve over time.
-- Export a clean dataset for dashboards and further modeling.
+---
 
-Pipeline:
-Extract -> Inspect -> Clean -> Analyze -> Visualize -> Export
-"""
+## 🎯 Project Overview
 
-# ============================
-# 0. LIBRARIES AND MODULES
-# ============================
+This project analyzes historical **BMW car sales and price data**, applying a complete ETL + Analytics workflow:
 
-from extract import extract
-from transform import TransformPipeline, ColumnCleaner, TypeCaster
+### **Objectives**
+- Load historical BMW car sales and price data  
+- Clean and standardize raw columns  
+- Assess data quality (missing values, duplicates, dtypes)  
+- Analyze how prices evolve over time  
+- Visualize trends and distributions  
+- Export a clean dataset for dashboards and modeling  
 
-import matplotlib.pyplot as plt
-from matplotlib.dates import DateFormatter
-import pandas as pd
-
-# ============================
-# 1. EXTRACT: LOAD RAW DATA
-# ============================
-
-# Load the dataset from a ZIP file (local path).
-# In the GitHub README, explain where the data comes from
-# and how someone else can download or reproduce it.
-df_raw = extract(
-    r'C:\Users\yefri\OneDrive\Escritorio\datos\Data\Dataset\BMW Car sales and Price Dataset.zip'
-)
-
-print("===== RAW DATA (first 10 rows) =====")
-print(df_raw.head(10))
-
-# ============================
-# 2. DATA QUALITY CHECKS
-# ============================
-
-# Number of fully duplicated rows
-num_duplicates = df_raw.duplicated().sum()
-print(f"\nNumber of duplicated rows: {num_duplicates}")
-
-# Missing values per column
-print("\n===== Missing values per column =====")
-print(df_raw.isnull().sum())
-
-# Initial data types
-print("\n===== Data types (raw) =====")
-print(df_raw.dtypes)
-
-# ============================
-# 3. TRANSFORM: CLEANING & TYPES
-# ============================
-
-# Transformation pipeline:
-# - ColumnCleaner: trims whitespace, standardizes column names
-#   (e.g. lower case), and handles basic cleaning.
-# - TypeCaster: converts 'year' to datetime for time-based analysis.
-pipeline = TransformPipeline([
-    ColumnCleaner(strip=True, lower=True),
-    TypeCaster({'year': 'datetime'})
-])
-
-df = pipeline.run(df_raw)
-
-print("\n===== DATA AFTER PIPELINE (first 10 rows) =====")
-print(df.head(10))
-
-print("\n===== Data types (post-pipeline) =====")
-print(df.dtypes)
+### **Pipeline**
 
 
-# ============================
-# 4. BASIC ANALYSIS
-# ============================
+---
 
-print("\n===== Descriptive statistics for price =====")
-print(df['price'].describe())
+# 📥 1. Data Extraction
 
+The dataset is loaded from a ZIP file using a custom ETL framework:
 
-# Price metrics by year
-price_by_year_mean = df.groupby('year')['price'].mean()
-price_by_year_sum = df.groupby('year')['price'].sum()
+- `extract.py`  
+- `TransformPipeline`  
+- `ColumnCleaner`  
+- `TypeCaster`
 
-print("\n===== Average price by year =====")
-print(price_by_year_mean)
+These modules ensure a **modular, reusable, production‑style ETL workflow**.
 
-print("\n===== Total price by year =====")
-print(price_by_year_sum)
+---
 
-# ============================
-# 5. VISUALIZATIONS
-# ============================
+# 🧪 2. Data Quality Checks
 
-plt.style.use("seaborn-v0_8-whitegrid")
+The raw dataset is inspected for:
 
-# Annual summaries
-avg_price_by_year = df.groupby('year', as_index=False)['price'].mean()
-median_price_by_year = df.groupby('year', as_index=False)['price'].median()
+- Missing values  
+- Duplicate rows  
+- Incorrect data types  
+- Column inconsistencies  
 
-# ----------------------------
-# 5.1 Price over time
-# ----------------------------
-fig, ax = plt.subplots(figsize=(14, 6))
+This ensures the dataset is reliable before analysis.
 
-ax.plot(
-    df['year'],
-    df['price'],
-    color='#1f4e79',
-    linewidth=2.2,
-    alpha=0.9
-)
+---
 
-ax.set_title('BMW Price Over Time', fontsize=16, fontweight='bold', pad=15)
-ax.set_xlabel('Year', fontsize=12)
-ax.set_ylabel('Price', fontsize=12)
-ax.tick_params(axis='x', rotation=45)
-ax.grid(True, linestyle='--', alpha=0.35)
+# 🧹 3. Data Cleaning & Type Casting
 
-for spine in ['top', 'right']:
-    ax.spines[spine].set_visible(False)
+Using the ETL pipeline:
 
-plt.tight_layout()
-plt.show()
+- Column names are standardized  
+- Whitespace is removed  
+- Data types are corrected  
+- `year` is converted to datetime for time‑series analysis  
 
-# ----------------------------
-# 5.2 Average price by year
-# ----------------------------
-fig, ax = plt.subplots(figsize=(12, 6))
+This produces a clean, analysis‑ready dataset.
 
-ax.bar(
-    avg_price_by_year['year'].astype(str),
-    avg_price_by_year['price'],
-    color='#2e8b57',
-    edgecolor='black',
-    linewidth=0.8,
-    alpha=0.9
-)
+---
 
-ax.set_title('Average BMW Price by Year', fontsize=16, fontweight='bold', pad=15)
-ax.set_xlabel('Year', fontsize=12)
-ax.set_ylabel('Average Price', fontsize=12)
-ax.tick_params(axis='x', rotation=45)
-ax.grid(axis='y', linestyle='--', alpha=0.35)
+# 📊 4. Analysis
 
-for spine in ['top', 'right']:
-    ax.spines[spine].set_visible(False)
+### **Descriptive Statistics (Price)**  
+The project computes:
 
-plt.tight_layout()
-plt.show()
+- Mean  
+- Median  
+- Standard deviation  
+- Min / Max  
+- Quartiles  
 
-# ----------------------------
-# 5.3 Median price by year
-# ----------------------------
-fig, ax = plt.subplots(figsize=(12, 6))
+### **Price Trends by Year**
+- Average price per year  
+- Total price per year  
+- Median price evolution  
 
-ax.plot(
-    median_price_by_year['year'],
-    median_price_by_year['price'],
-    marker='o',
-    markersize=7,
-    linewidth=2.5,
-    color='#c0392b'
-)
+These metrics reveal how BMW pricing changes over time.
 
-ax.set_title('Median BMW Price by Year', fontsize=16, fontweight='bold', pad=15)
-ax.set_xlabel('Year', fontsize=12)
-ax.set_ylabel('Median Price', fontsize=12)
-ax.set_xticks(median_price_by_year['year'])
-ax.tick_params(axis='x', rotation=45)
-ax.grid(True, linestyle='--', alpha=0.35)
+---
 
-for spine in ['top', 'right']:
-    ax.spines[spine].set_visible(False)
+# 📈 5. Visualizations
 
-plt.tight_layout()
-plt.show()
+All plots are generated with Matplotlib and saved in the `/plots` folder.
 
-# ----------------------------
-# 5.4 Price distribution
-# ----------------------------
-fig, ax = plt.subplots(figsize=(10, 6))
+### **Included Visualizations**
+- **BMW Price Over Time**  
+- **Average Price by Year**  
+- **Median Price by Year**  
+- **Price Distribution Histogram**
 
-ax.hist(
-    df['price'].dropna(),
-    bins=20,
-    color='#d97b66',
-    edgecolor='black',
-    alpha=0.85
-)
+You can view them directly here:
 
-ax.set_title('Distribution of BMW Prices', fontsize=16, fontweight='bold', pad=15)
-ax.set_xlabel('Price', fontsize=12)
-ax.set_ylabel('Frequency', fontsize=12)
-ax.grid(axis='y', linestyle='--', alpha=0.35)
+---
 
-for spine in ['top', 'right']:
-    ax.spines[spine].set_visible(False)
+## 📈 BMW Price Over Time
+![BMW Price Over Time](plots/bmw_price_over_time.png)
 
-plt.tight_layout()
-plt.show()
+---
+
+## 📊 Average BMW Price by Year
+![Average Price](plots/bmw_avg_price_by_year.png)
+
+---
+
+## 📉 Median BMW Price by Year
+![Median Price](plots/bmw_median_price_by_year.png)
+
+---
+
+## 📦 Price Distribution
+![Price Distribution](plots/bmw_price_distribution.png)
+
+---
+
+# 📤 6. Export
+
+The cleaned dataset is exported as:
 
